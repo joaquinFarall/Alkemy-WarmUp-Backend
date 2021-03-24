@@ -3,14 +3,20 @@ const app = express();
 
 // Settings
 app.set('port', process.env.PORT || 3000);
-require('./database');
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/posts', require('./routes/posts'));
+
+// DB sync
+const db = require('./models/index');
+
+db.sequelize.sync()
+    .then(res => console.log('DB sync'))
+    .catch(err => console.log(err));
 
 // Starting server
 const port = app.get('port');

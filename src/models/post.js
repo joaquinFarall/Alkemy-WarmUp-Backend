@@ -1,24 +1,19 @@
-module.exports = (sequelize, type) => {
-    return sequelize.define('post', {
-        id: {
-            type: type.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
+module.exports = (sequelize, DataTypes) => {
+    const Post = sequelize.define('Post', {
         title: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         },
         content: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         },
         img: {
-            type: type.STRING,
+            type: DataTypes.STRING,
             allowNull: false
         },
         category_id: {
-            type: type.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: "categories",
@@ -28,4 +23,10 @@ module.exports = (sequelize, type) => {
     }, {
         updatedAt: false,
     });
-};
+
+    Post.associate = models => {
+        Post.belongsTo(models.Category, { foreignKey: 'category_id' })
+    }
+
+    return Post;
+}
